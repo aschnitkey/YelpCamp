@@ -1,0 +1,11 @@
+/* body {
+    background: #429583;
+} */
+
+.thumbnail {
+    padding: 0;
+}
+
+.thumbnail img {
+    width: 100%;
+}
