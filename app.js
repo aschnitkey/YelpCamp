@@ -15,6 +15,18 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 seedDB();
 
+// Passport Configuration
+app.use(require("express-session")({
+  secret: "Once again Rusty wins cutest dog!",
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.get("/", function(req, res){
   res.redirect("campgrounds");
 });
@@ -106,6 +118,29 @@ app.post("/campgrounds/:id/comments", function(req, res){
   //redirect to campground show page
 });
 
+// ========================================================================================
+//   AUTH ROUTES
+// ========================================================================================
+
+// show register form
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+// sign up logic
+app.post("/register", (req, res) => {
+  let newUser = new User({username: req.body.username});
+  User.register(newUser, req.body.password, (err, user) => {
+    if(err){
+      console.log(err);
+      res.render("register");
+      return;
+    } 
+    passport.authenticate("local")(req, res, () => {
+      res.redirect("campgrounds");
+    });
+  });
+})
 
 
 
