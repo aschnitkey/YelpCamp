@@ -23,6 +23,10 @@ app.use(require("express-session")({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -37,7 +41,7 @@ app.get("/campgrounds", function(req, res){
     if(err){
       console.log(err);
     } else {
-      res.render("campgrounds/index", {campgrounds: allCampgrounds});
+      res.render("campgrounds/index", {campgrounds: allCampgrounds, currentUser: req.user});
     }
   })
 });
