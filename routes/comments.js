@@ -31,6 +31,11 @@ router.get("/comments/new", isLoggedIn, function(req, res){
             console.log(err);
             res.redirect("/campgrounds");
           } else {
+            // add username and id to comment
+            newestComment.author.id = req.user._id;
+            newestComment.author.username = req.user.username;
+            // save comment
+            newestComment.save();
             foundCampground.comments.push(newestComment);
             foundCampground.save();
             res.redirect("/campgrounds/" + foundCampground.id);
