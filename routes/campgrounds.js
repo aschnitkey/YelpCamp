@@ -16,12 +16,16 @@ router.get("/", function(req, res){
   
   
   //CREATE
-  router.post("/", function(req, res){
+  router.post("/", isLoggedIn, function(req, res){
     // get data from form and add to campgrounds array
     let name = req.body.name;
     let image = req.body.image;
     let desc = req.body.description;
-    let newCampground = {name: name, image: image, description: desc};
+    let author = {
+      id: req.user._id,
+      username: req.user.username
+    }
+    let newCampground = {name: name, image: image, description: desc, author: author};
     // Create a new campground and save to DB
     Campground.create(newCampground, function(err, newlyCreated){
       if(err){
@@ -34,7 +38,7 @@ router.get("/", function(req, res){
   });
   
   //NEW
-  router.get("/new", function(req, res){
+  router.get("/new", isLoggedIn, function(req, res){
     res.render("campgrounds/new");
   });
   
