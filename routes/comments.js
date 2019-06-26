@@ -8,7 +8,7 @@ const Comment = require("../models/comment");
 // ========================================================================================
 
 // comments new route
-router.get("/comments/new", isLoggedIn, function(req, res){
+router.get("/new", isLoggedIn, function(req, res){
     Campground.findById(req.params.id, function(err, foundCampground){
       if(err){
         res.redirect("/campgrounds");
@@ -19,7 +19,7 @@ router.get("/comments/new", isLoggedIn, function(req, res){
   });
   
   // comments create route
-  router.post("/comments", isLoggedIn, function(req, res){
+  router.post("/", isLoggedIn, function(req, res){
     //lookup campground using id
     Campground.findById(req.params.id, function(err, foundCampground){
       if(err){
@@ -46,6 +46,31 @@ router.get("/comments/new", isLoggedIn, function(req, res){
     //create new comment
     //connect new comment to campground
     //redirect to campground show page
+  });
+
+  // comments edit route
+  router.get("/:comment_id/edit", (req, res) => {
+    Comment.findById(req.params.comment_id, (err, foundComment) => {
+      if(err){
+        res.redirect("back");
+        console.log(err);
+      } else {
+        res.render("comments/edit", {campground_id: req.params.id, comment: foundComment});
+      }
+    })
+  });
+
+  // comments update route
+  router.put("/:comment_id", (req, res) => {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err) => {
+      if(err){
+        console.log(err);
+        res.redirect("back");
+      } else {
+        res.redirect("/campgrounds/" + req.params.id);
+      }
+    });
+    
   });
 
   function isLoggedIn(req, res, next){
