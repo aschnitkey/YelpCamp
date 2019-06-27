@@ -10,6 +10,14 @@
     width: 100%;
 }
 
-#delete-form {
+.delete-form {
     display: inline;
+}
+
+.comments-delete-form {
+    margin-bottom: 20px;
+}
+
+.comment-text {
+    margin-bottom: 5px;
 }
