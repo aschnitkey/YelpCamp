@@ -30,6 +30,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
         Comment.create(req.body.comment, function(err, newestComment){
           if(err){
             console.log(err);
+            req.flash("error", "Something went wrong");
             res.redirect("/campgrounds");
           } else {
             // add username and id to comment
@@ -39,6 +40,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
             newestComment.save();
             foundCampground.comments.push(newestComment);
             foundCampground.save();
+            req.flash("success", "Successfully added comment");
             res.redirect("/campgrounds/" + foundCampground.id);
           }
         });
@@ -80,6 +82,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
         console.log(err);
         res.redirect("back");
       } else {
+        req.flash("success", "Comment deleted");
         res.redirect("/campgrounds/" + req.params.id);
       }
     });
