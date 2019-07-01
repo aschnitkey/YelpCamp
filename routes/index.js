@@ -6,7 +6,7 @@ const User = require("../models/user");
 
 //root route
 router.get("/", function(req, res){
-    res.redirect("campgrounds");
+    res.render("landing");
   });
 
   
